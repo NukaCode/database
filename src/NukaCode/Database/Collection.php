@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Collection as BaseCollection;
  */
 class Collection extends BaseCollection
 {
-
     /**
      * Dynamically retrieve attributes on the model.
      *
@@ -188,7 +187,7 @@ class Collection extends BaseCollection
         return [$finalOperator, $position, $not];
 
         // This is not working at the moment
-        // @todo riddles - fix this
+        // todo riddles - fix this
         //if ($finalOperator == 'many') {
         //    $where = null;
         //    foreach ($args[0] as $column => $value) {
@@ -332,19 +331,13 @@ class Collection extends BaseCollection
             return true;
         }
 
-        switch ($operator) {
-            case 'in':
-                return $this->getWhereIn($object, $column, $value, $inverse);
-            case 'between':
-                return $this->getWhereBetween($object, $column, $value, $inverse);
-            case 'like':
-                return $this->getWhereLike($object, $column, $value, $inverse);
-            case 'null':
-                return $this->getWhereNull($object, $column, $inverse);
-            case '=':
-            default:
-                return $this->getWhereDefault($object, $column, $value, $inverse);
+        $method = 'getWhere' . ucfirst($operator);
+
+        if (method_exists($this, $method)) {
+            return $this->{$method}($object, $column, $value, $inverse);
         }
+
+        return $this->getWhereDefault($object, $column, $value, $inverse);
     }
 
     private function getWhereIn($object, $column, $value, $inverse)
@@ -386,7 +379,7 @@ class Collection extends BaseCollection
         return false;
     }
 
-    private function getWhereNull($object, $column, $inverse)
+    private function getWhereNull($object, $column, $value, $inverse)
     {
         if ((! is_null($object->$column) || $object->$column != null) && $inverse == false) {
             return true;
