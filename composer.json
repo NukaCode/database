@@ -1,0 +1,32 @@
+{
+    "name":        "nukacode/database",
+    "description": "Database helpers for Laravel sites.",
+    "license":     "MIT",
+    "authors":     [
+        {
+            "name":  "Stygian",
+            "email": "stygian.warlock.v2@gmail.com"
+        },
+        {
+            "name":  "Riddles",
+            "email": "riddles@dev-toolbox.com"
+        }
+    ],
+    "require": {
+        "illuminate/database": "^5.2.0"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~4.0",
+        "phpspec/phpspec": "~2.1",
+        "henrikbjorn/phpspec-code-coverage": "~0.2",
+        "benconstable/phpspec-laravel": "~2.0"
+    },
+    "autoload":    {
+        "psr-4":    {
+            "NukaCode\\Database\\": "src/NukaCode/Database"
+        }
+    },
+    "minimum-stability": "dev"
+}
