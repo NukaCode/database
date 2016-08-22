@@ -40,16 +40,9 @@ getWhereMany     | ARRAY $columns => $values | This will return all objects in t
 ### Method Modifiers
 Method Name | Parameters |Result
 ----------- | ---------- | --------
-getWhereNot      | STRING $column          | This will return all objects in the collection 
-                 | STRING $value           | that column `$column` is other than $value.  
-                                           | (The not operator can be added to all methods 
-                                           | to invert the results)
-getWhereFirst    | STRING $column          | This will return only the first object in the 
-                 | STRING $value           | collection.  (The first operator can be added 
-                                           | to all methods to return the first result)
-getWhereLast     | STRING $column          | This will return only the last object in the 
-                 | STRING $value           | collection.  (The last operator can be added 
-                                           | to all methods to return the last result)
+getWhereNot      | STRING $column<br />STRING $value          | This will return all objects in the collection that column `$column` is other than $value.  (The not operator can be added to all methods to invert the results)
+getWhereFirst    | STRING $column<br />STRING $value          | This will return only the first object in the collection.  (The first operator can be added to all methods to return the first result)
+getWhereLast     | STRING $column<br />STRING $value          | This will return only the last object in the collection.  (The last operator can be added to all methods to return the last result)
 
 ### Example
 You can also look at `the tests <https://github.com/NukaCode/core/blob/master/tests/spec/NukaCode/Core/Database/CollectionSpec.php>`_ for more examples
