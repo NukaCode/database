@@ -93,17 +93,17 @@ class Collection extends BaseCollection
      */
     public function insertAfter($value, $afterKey)
     {
-        $newObject = new self();
+        $new_object = new self();
 
         foreach ((array)$this->items as $k => $v) {
             if ($afterKey == $k) {
-                $newObject->add($value);
+                $new_object->add($value);
             }
 
-            $newObject->add($v);
+            $new_object->add($v);
         }
 
-        $this->items = $newObject->items;
+        $this->items = $new_object->items;
 
         return $this;
     }
@@ -112,12 +112,12 @@ class Collection extends BaseCollection
      * Turn a collection into a drop down for an html select element.
      *
      * @param  string $firstOptionText Text for the first object in the select array.
-     * @param  string $idColumn        The column to use for the id column in the option element.
+     * @param  string $id              The column to use for the id column in the option element.
      * @param  string $name            The column to use for the name column in the option element.
      *
      * @return array                    The new select element array.
      */
-    public function toSelectArray($firstOptionText = 'Select one', $idColumn = 'id', $name = 'name')
+    public function toSelectArray($firstOptionText = 'Select one', $id = 'id', $name = 'name')
     {
         $selectArray = [];
 
@@ -126,7 +126,7 @@ class Collection extends BaseCollection
         }
 
         foreach ($this->items as $item) {
-            $selectArray[$item->{$idColumn}] = $item->{$name};
+            $selectArray[$item->{$id}] = $item->{$name};
         }
 
         return $selectArray;
@@ -252,11 +252,11 @@ class Collection extends BaseCollection
     {
         $output = clone $this;
         foreach ($output->items as $key => $item) {
-            // No tap direct object access
-            $forget = $this->whereObject($item, $column, $operator, $value, $inverse);
-
             if (strstr($column, '->')) {
                 $forget = $this->handleMultiTap($item, $column, $value, $operator, $inverse);
+            } else {
+                // No tap direct object access
+                $forget = $this->whereObject($item, $column, $operator, $value, $inverse);
             }
 
             if ($forget == true) {
@@ -291,10 +291,10 @@ class Collection extends BaseCollection
                 // The column has a tap that ends in a collection.
                 return $this->whereObject($subObject, $columnToSearch, $operator, $value, $inverse);
             }
+        } else {
+            // The column has a tap that ends in direct access
+            return $this->whereObject($objectToSearch, $columnToSearch, $operator, $value, $inverse);
         }
-
-        // The column has a tap that ends in direct access
-        return $this->whereObject($objectToSearch, $columnToSearch, $operator, $value, $inverse);
     }
 
     /**
@@ -310,7 +310,7 @@ class Collection extends BaseCollection
         $objectToSearch = $item;
         $columnToSearch = array_pop($taps);
 
-        foreach ($taps as $tap) {
+        foreach ($taps as $tapKey => $tap) {
             // Keep tapping till we hit the last object.
             $objectToSearch = $objectToSearch->$tap;
         }
@@ -364,10 +364,10 @@ class Collection extends BaseCollection
             if ($object->$column < $value[0] || $object->$column > $value[1]) {
                 return true;
             }
-        }
-
-        if ($object->$column >= $value[0] && $object->$column <= $value[1]) {
-            return true;
+        } else {
+            if ($object->$column >= $value[0] && $object->$column <= $value[1]) {
+                return true;
+            }
         }
 
         return false;
