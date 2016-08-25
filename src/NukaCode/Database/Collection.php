@@ -31,13 +31,19 @@ class Collection extends BaseCollection
                 foreach ($item as $subItem) {
                     $newCollection->put($newCollection->count(), $subItem->$key);
                 }
-            } elseif (is_object($item) && ! $item instanceof self && $item->$key instanceof self) { // Next tap is a collection.
+
+                continue;
+            }
+
+            if (is_object($item) && ! $item instanceof self && $item->$key instanceof self) { // Next tap is a collection.
                 foreach ($item->$key as $subItem) {
                     $newCollection->put($newCollection->count(), $subItem);
                 }
-            } else { // This item is an object.
-                $newCollection->put($newCollection->count(), $item->$key);
+
+                continue;
             }
+
+            $newCollection->put($newCollection->count(), $item->$key);
         }
 
         return $newCollection;
