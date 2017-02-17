@@ -78,6 +78,11 @@ class CollectionSpec extends ObjectBehavior {
         $this->getWhere('name', 'bob')->shouldHaveCount(1);
     }
 
+    public function it_gets_results_where_key_is_equal_to_given_value_and_a_zero()
+    {
+        $this->getWhere('age', 0)->shouldHaveCount(1);
+    }
+
     public function it_gets_results_that_are_in_a_given_array()
     {
         $this->getWhereIn('age', [10, 15])->shouldHaveCount(2);
